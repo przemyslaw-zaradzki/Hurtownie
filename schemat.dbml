@@ -1,0 +1,105 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+
+Table rental_paymen {
+  rental_payment_id integer [primary key]
+  custormer_adress_id integer
+  inventory_id integer
+  staff_id integer
+  rental_time integer
+  time_to_payment_deadline integer
+  rental_date_id integer
+  retirn_date_id integer
+  payment_deadline_id integer
+  SK_store_id integer
+
+}
+
+Table custormer_adress {
+  custormer_adress_id integer [primary key]
+  first_name varchar
+  last_name varchar
+  email varchar
+  birth_date DATE
+  adress varchar       // kolumny dołączona z tabeli address
+  postal_code varchar  //
+  city varchar         //
+  country varchar      //
+}
+
+Table inventory {
+  inventory_id integer [primary key]
+  fuel_type varchar
+  production_year date
+  producer varchar     // kolumny dołączone z tabeli car
+  model varchar        //
+  purchase_price decimal
+  sell_price decimal
+  city varchar         // kolumna dołączona, wynika z założeń zadania ???
+  country varchar      // ???
+  postal_code varchar  // ???
+}
+
+Table bridge_inventory_equipment {
+  inventory_id integer [primary key]
+  equipment_id integer [primary key]
+}
+
+Table equipment {
+  equipment_id integer [primary key]
+  name varchar
+  type varchar
+  version varchar
+}
+
+Table staff {
+  staff_id integer [primary key]
+  first_name varchar
+  last_name varchar
+  city varchar         // kolumna dołączona, wynika z założeń zadania ???
+  country varchar      // ???
+  postal_code varchar  // ???
+}
+
+Table store {
+  SK_store_id integer [primary key] // scd2
+  store_id integer
+  city varchar           // kolumna dołączona, wynika z założeń zadania
+  country varchar        //
+  postal_code varchar    //
+  store_manager_id integer
+  is_active bool
+}
+
+Table date {
+  date_id integer [primary key]
+  full_date_str varchar
+  full_date date
+  year integer
+  quarter integer
+  month integer
+  day integer
+  weekday integer
+}
+
+Table service {
+  service_id integer [primary key]
+  inventory_id integer
+  service_date_id integer
+  service_type varchar
+  service_cost decimal
+}
+
+Ref: custormer_adress.custormer_adress_id < rental_paymen.custormer_adress_id
+Ref: inventory.inventory_id < rental_paymen.inventory_id
+Ref: staff.staff_id < rental_paymen.staff_id
+Ref: store.SK_store_id < rental_paymen.SK_store_id
+Ref: date.date_id < rental_paymen.rental_date_id
+Ref: date.date_id < rental_paymen.retirn_date_id
+Ref: date.date_id < rental_paymen.payment_deadline_id
+Ref: inventory.inventory_id < bridge_inventory_equipment.inventory_id
+Ref: equipment.equipment_id < bridge_inventory_equipment.equipment_id
+Ref: inventory.inventory_id < service.inventory_id
+Ref: date.date_id < service.service_date_id
+
