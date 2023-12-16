@@ -2,43 +2,44 @@
 // Docs: https://dbml.dbdiagram.io/docs
 
 
-Table rental_paymen {
+Table fact_rental_paymen {
   rental_payment_id integer [primary key]
   custormer_adress_id integer
   inventory_id integer
   staff_id integer
-  rental_time integer
-  time_to_payment_deadline integer
+  rental_days integer
+  payment_overdue_days integer
   rental_date_id integer
   retirn_date_id integer
   payment_deadline_id integer
   SK_store_id integer
-
+  payment_amount decimal
+  rental_amount decimal
+  rental_rate decimal
 }
 
-Table custormer_adress {
-  custormer_adress_id integer [primary key]
-  first_name varchar
-  last_name varchar
-  email varchar
-  birth_date DATE
-  adress varchar       // kolumny dołączona z tabeli address
-  postal_code varchar  //
-  city varchar         //
-  country varchar      //
+Table dim_customer {
+  custormer_id integer [primary key]
+  customer_key integer
+  customer_name varchar
+  customer_email varchar
+  customer_birth_date DATE
+  customer_adrress varchar      // kolumny dołączona z tabeli address
+  customer_postal_code varchar  //
+  customer_city varchar         //
+  customer_country varchar      //
 }
 
-Table inventory {
+Table dim_inventory {
   inventory_id integer [primary key]
-  fuel_type varchar
-  production_year date
-  producer varchar     // kolumny dołączone z tabeli car
-  model varchar        //
-  purchase_price decimal
-  sell_price decimal
-  city varchar         // kolumna dołączona, wynika z założeń zadania ???
-  country varchar      // ???
-  postal_code varchar  // ???
+  inventory_key intiger
+  inventory_fuel_type varchar
+  inventory_production_year date
+  inventory_producer varchar     // kolumny dołączone z tabeli car
+  inventory_model varchar        //
+  inventory_city varchar         // kolumna dołączona, wynika z założeń zadania ???
+  inventory_country varchar      // ???
+  inventory_postal_code varchar  // ???
 }
 
 Table bridge_inventory_equipment {
@@ -46,44 +47,51 @@ Table bridge_inventory_equipment {
   equipment_id integer [primary key]
 }
 
-Table equipment {
+Table dim_equipment {
   equipment_id integer [primary key]
-  name varchar
-  type varchar
-  version varchar
+  equipment_key intiger
+  equipment_name varchar
+  equipment_type varchar
+  equipment_version varchar
 }
 
-Table staff {
+Table dim_staff {
   staff_id integer [primary key]
-  first_name varchar
-  last_name varchar
-  city varchar         // kolumna dołączona, wynika z założeń zadania ???
-  country varchar      // ???
-  postal_code varchar  // ???
+  staff_key intiger
+  staff_name varchar
+  staff_manager_name varchar
+  staff_city varchar         // kolumna dołączona, wynika z założeń zadania ???
+  staff_country varchar      // ???
+  staff_postal_code varchar  // ???
 }
 
-Table store {
-  SK_store_id integer [primary key] // scd2
-  store_id integer
-  city varchar           // kolumna dołączona, wynika z założeń zadania
-  country varchar        //
-  postal_code varchar    //
+Table dim_store {
+  store_id integer [primary key] // scd2
+  store_key intiger
+  store_city varchar           // kolumna dołączona, wynika z założeń zadania
+  store_country varchar        //
+  store_postal_code varchar    //
   store_manager_id integer
-  is_active bool
+  store_manager_name varchar
+  store_is_active bool
+  store_valid_from date
+  store_valid_to date
 }
 
-Table date {
+Table dim_date {
   date_id integer [primary key]
-  full_date_str varchar
-  full_date date
-  year integer
-  quarter integer
-  month integer
-  day integer
-  weekday integer
+  date_full_date_str varchar
+  date_full_date date
+  date_year integer
+  date_quarter integer
+  date_month integer
+  date_day integer
+  date_weekday integer
+  date_weekday_str varchar
+  date_is_month_end bool
 }
 
-Table service {
+Table fact_service {
   service_id integer [primary key]
   inventory_id integer
   service_date_id integer
@@ -91,15 +99,15 @@ Table service {
   service_cost decimal
 }
 
-Ref: custormer_adress.custormer_adress_id < rental_paymen.custormer_adress_id
-Ref: inventory.inventory_id < rental_paymen.inventory_id
-Ref: staff.staff_id < rental_paymen.staff_id
-Ref: store.SK_store_id < rental_paymen.SK_store_id
-Ref: date.date_id < rental_paymen.rental_date_id
-Ref: date.date_id < rental_paymen.retirn_date_id
-Ref: date.date_id < rental_paymen.payment_deadline_id
-Ref: inventory.inventory_id < bridge_inventory_equipment.inventory_id
-Ref: equipment.equipment_id < bridge_inventory_equipment.equipment_id
-Ref: inventory.inventory_id < service.inventory_id
-Ref: date.date_id < service.service_date_id
+Ref: dim_customer.custormer_id < fact_rental_paymen.custormer_adress_id
+Ref: dim_inventory.inventory_id < fact_rental_paymen.inventory_id
+Ref: dim_staff.staff_id < fact_rental_paymen.staff_id
+Ref: dim_store.store_id < fact_rental_paymen.SK_store_id
+Ref: dim_date.date_id < fact_rental_paymen.rental_date_id
+Ref: dim_date.date_id < fact_rental_paymen.retirn_date_id
+Ref: dim_date.date_id < fact_rental_paymen.payment_deadline_id
+Ref: dim_inventory.inventory_id < bridge_inventory_equipment.inventory_id
+Ref: dim_equipment.equipment_id < bridge_inventory_equipment.equipment_id
+Ref: dim_inventory.inventory_id < fact_service.inventory_id
+Ref: dim_date.date_id < fact_service.service_date_id
 
