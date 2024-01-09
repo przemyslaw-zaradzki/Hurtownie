@@ -1,0 +1,9 @@
+{
+    "JDBC_PATH": "",
+    "SRC_DB_URL": "",
+    "SRC_DB_USER": "",
+    "SRC_DB_PASSWORD": "",
+    "DST_DB_URL": "",
+    "DST_DB_USER": "",
+    "DST_DB_PASSWORD": ""
+}
