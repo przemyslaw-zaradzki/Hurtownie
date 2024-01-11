@@ -24,7 +24,7 @@ Table dim_customer {
   customer_name varchar
   customer_email varchar
   customer_birth_date DATE
-  customer_adrress varchar      // kolumny dołączona z tabeli address
+  customer_address varchar      // kolumny dołączona z tabeli address
   customer_postal_code varchar  //
   customer_city varchar         //
   customer_country varchar      //
@@ -37,9 +37,10 @@ Table dim_inventory {
   inventory_production_year date
   inventory_producer varchar     // kolumny dołączone z tabeli car
   inventory_model varchar        //
-  inventory_city varchar         // kolumna dołączona, wynika z założeń zadania ???
-  inventory_country varchar      // ???
+  inventory_address varchar      // kolumna dołączona, wynika z założeń zadania
   inventory_postal_code varchar  // ???
+  inventory_city varchar         // ???
+  inventory_country varchar      // ???
 }
 
 Table bridge_inventory_equipment {
@@ -60,17 +61,19 @@ Table dim_staff {
   staff_key intiger
   staff_name varchar
   staff_manager_name varchar
-  staff_city varchar         // kolumna dołączona, wynika z założeń zadania ???
-  staff_country varchar      // ???
+  staff_address varchar      // kolumna dołączona, wynika z założeń zadania
   staff_postal_code varchar  // ???
+  staff_city varchar         // ???
+  staff_country varchar      // ???
 }
 
 Table dim_store {
   store_id integer [primary key] // scd2
   store_key intiger
-  store_city varchar           // kolumna dołączona, wynika z założeń zadania
-  store_country varchar        //
+  store_address varchar        // kolumna dołączona, wynika z założeń zadania 
   store_postal_code varchar    //
+  store_city varchar           //
+  store_country varchar        //
   store_manager_id integer
   store_manager_name varchar
   store_is_active bool
@@ -78,17 +81,17 @@ Table dim_store {
   store_valid_to date
 }
 
-Table dim_date {
-  date_id integer [primary key]
-  date_full_date_str varchar
-  date_full_date date
-  date_year integer
-  date_quarter integer
-  date_month integer
-  date_day integer
-  date_weekday integer
-  date_weekday_str varchar
-  date_is_month_end bool
+Table dim_calendar {
+  calendar_id integer [primary key]
+  calendar_full_date_str varchar
+  calendar_full_date date
+  calendar_year integer
+  calendar_quarter integer
+  calendar_month integer
+  calendar_day integer
+  calendar_weekday integer
+  calendar_weekday_str varchar
+  calendar_is_month_end bool
 }
 
 Table fact_service {
@@ -103,11 +106,11 @@ Ref: dim_customer.custormer_id < fact_rental_paymen.custormer_adress_id
 Ref: dim_inventory.inventory_id < fact_rental_paymen.inventory_id
 Ref: dim_staff.staff_id < fact_rental_paymen.staff_id
 Ref: dim_store.store_id < fact_rental_paymen.SK_store_id
-Ref: dim_date.date_id < fact_rental_paymen.rental_date_id
-Ref: dim_date.date_id < fact_rental_paymen.retirn_date_id
-Ref: dim_date.date_id < fact_rental_paymen.payment_deadline_id
+Ref: dim_calendar.calendar_id < fact_rental_paymen.rental_date_id
+Ref: dim_calendar.calendar_id < fact_rental_paymen.retirn_date_id
+Ref: dim_calendar.calendar_id < fact_rental_paymen.payment_deadline_id
 Ref: dim_inventory.inventory_id < bridge_inventory_equipment.inventory_id
 Ref: dim_equipment.equipment_id < bridge_inventory_equipment.equipment_id
 Ref: dim_inventory.inventory_id < fact_service.inventory_id
-Ref: dim_date.date_id < fact_service.service_date_id
+Ref: dim_calendar.calendar_id < fact_service.service_date_id
 
